@@ -1,0 +1,47 @@
+{
+    "update_url": "https://clients2.google.com/service/update2/crx",
+    "description": "Your AI Personal Assistant for web browsing, content creation, online research, task automation, and more – all in one extension.",
+    "version": "3.1.17",
+    "manifest_version": 3,
+    "name": "HyperWrite - AI Assistant",
+    "author": "HyperWrite",
+    "icons": {
+        "128": "icon128.png"
+    },
+    "permissions": ["storage", "tabs"],
+    "host_permissions": ["<all_urls>"],
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [{
+        "matches": ["https://docs.google.com/document/d/*"],
+        "js": ["googleDocsUtil.bundle.js", "googleDocsInject.bundle.js"],
+        "run_at": "document_idle"
+    }, {
+        "matches": ["https://docs.google.com/document/*"],
+        "js": ["googleDocsCanvasInjector.bundle.js"],
+        "run_at": "document_start",
+        "all_frames": false
+    }, {
+        "matches": ["https://app.hyperwriteai.com/*", "https://hyperwriteai.com/*", "http://localhost:3000/*", "http://localhost:3001/*"],
+        "all_frames": false,
+        "js": ["extensionInstalled.bundle.js"],
+        "run_at": "document_idle"
+    }, {
+        "matches": ["<all_urls>"],
+        "exclude_matches": ["https://hyperwriteai.com/*", "https://auth.hyperwriteai.com/*", "https://accounts.google.com/*"],
+        "js": ["app.bundle.js"],
+        "run_at": "document_end",
+        "all_frames": false
+    }],
+    "background": {
+        "service_worker": "background.bundle.js"
+    },
+    "externally_connectable": {
+        "matches": ["https://app.hyperwriteai.com/*", "https://hyperwriteai.com/*", "http://localhost:3000/*", "http://localhost:3001/*"]
+    },
+    "web_accessible_resources": [{
+        "resources": ["index.html", "content/inject.js", "hyperlogo-public.png", "*.png", "*.svg", "*.gif", "*.woff", "*.tff", "content/gDocsAnnotatedCanvas.js"],
+        "matches": ["<all_urls>"]
+    }]
+}
